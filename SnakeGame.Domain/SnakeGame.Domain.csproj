@@ -38,8 +38,16 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Class1.cs" />
+        <Compile Include="Cell.cs" />
+        <Compile Include="EndGameException.cs" />
+        <Compile Include="Food.cs" />
+        <Compile Include="Game.cs" />
+        <Compile Include="GameFactory.cs" />
+        <Compile Include="ICreature.cs" />
+        <Compile Include="Map.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Snake.cs" />
+        <Compile Include="SnakeDirection.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
