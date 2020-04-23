@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeGame", "SnakeGame\SnakeGame.csproj", "{D0D945A7-EAA3-4715-AC4C-24B0FC3FEF83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeGame.Domain", "SnakeGame.Domain\SnakeGame.Domain.csproj", "{D0D945A7-EAA3-4715-AC4C-24B0FC3FEF83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
