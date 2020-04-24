@@ -28,8 +28,7 @@
             <Border Height="501"
                     Width="1001"
                     BorderBrush="DimGray"
-                    BorderThickness="2"></Border>
+                    BorderThickness="2" />
         </Canvas>
-        
     </Grid>
 </Window>

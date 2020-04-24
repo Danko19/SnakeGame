@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using SnakeGame.Domain;
 
 namespace SnakeGame.Client
@@ -10,6 +7,7 @@ namespace SnakeGame.Client
     public class PlaygroundDrawer
     {
         private readonly Canvas canvas;
+        private readonly Dictionary<string, SnakeDrawer> snakeDrawers = new Dictionary<string, SnakeDrawer>();
 
         public PlaygroundDrawer(Canvas canvas)
         {
@@ -18,21 +16,25 @@ namespace SnakeGame.Client
 
         public void Show(Map map)
         {
-            var stepX = canvas.Width / map.Width;
-            var stepY = canvas.Height / map.Height;
-            DrawSnake(map.Snakes.First(), stepX - 1);
+            var step = canvas.Width / map.Width;
+            for (var i = 0; i < map.Snakes.Count; i++)
+            {
+                var color = SnakeColors.PreparedColors[i];
+                var snakeDrawer = new SnakeDrawer(canvas, color);
+                var snake = map.Snakes[i];
+                snakeDrawers.Add(snake.Name, snakeDrawer);
+                snakeDrawer.Show(snake, step);
+            }
         }
 
-        private void DrawSnake(Snake snake, double stepX, double stepY, double width)
+        public void Update(Map map)
         {
-            var polyline = canvas.Children.Cast<Polyline>().SingleOrDefault(x => x.Name == snake.Name);
-            if (polyline == null)
+            var step = canvas.Width / map.Width;
+            foreach (var snake in map.Snakes)
             {
-                polyline = new Polyline();
-                canvas.Children.Add(polyline);
+                var snakeDrawer = snakeDrawers[snake.Name];
+                snakeDrawer.Update(snake, step);
             }
-            
-            polyline.Points.First().
         }
     }
 }

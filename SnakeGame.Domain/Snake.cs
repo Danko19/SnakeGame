@@ -33,17 +33,16 @@ namespace SnakeGame.Domain
             else if (Direction == SnakeDirection.Right)
                 newX++;
             var newHead = map.GetNewPoint(newX, newY);
-            
-            if (map.IsSnake(newHead))
-            {
-                body.AddFirst(newHead);
-                throw new SnakeConflictException(newHead);
-            }
+
+            var isConflict = map.IsSnake(newHead);
             
             body.AddFirst(newHead);
             if (map.IsFood(Tail))
                 map.RemoveFood(Tail);
             else body.RemoveLast();
+            
+            if (isConflict)
+                throw new SnakeConflictException(newHead);
         }
     }
 }

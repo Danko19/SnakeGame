@@ -1,6 +1,4 @@
-﻿using SnakeGame.Domain;
-
-namespace SnakeGame.Client
+﻿namespace SnakeGame.Client
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,7 +11,6 @@ namespace SnakeGame.Client
         {
             InitializeComponent();
             playgroundDrawer = new PlaygroundDrawer(Playground);
-            playgroundDrawer.Show(new Map(100, 50));
         }
 
         // private void ButtonBase_OnClick(object sender, RoutedEventArgs es)

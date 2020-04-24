@@ -28,8 +28,8 @@ namespace SnakeGame.Client
         public void Update(Snake snake, double size)
         {
             var points = snake.Body.ToHashSet();
-            var pointsToAdd = points.Except(rectangles.Keys);
-            var pointsToRemove = rectangles.Keys.Except(points);
+            var pointsToAdd = points.Except(rectangles.Keys).ToList();
+            var pointsToRemove = rectangles.Keys.Except(points).ToList();
 
             foreach (var point in pointsToAdd)
                 AddSnakeSegment(point, CreateRectangle(point, size));
