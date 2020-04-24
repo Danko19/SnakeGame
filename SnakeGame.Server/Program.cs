@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-
-namespace SnakeGame.Server
+﻿namespace SnakeGame.Server
 {
     static class Program
     {

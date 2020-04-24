@@ -3,25 +3,25 @@ using System.Linq;
 
 namespace SnakeGame.Domain
 {
-    public class Snake : ICreature
+    public class Snake
     {
-        private readonly LinkedList<Cell> body = new LinkedList<Cell>();
+        private readonly LinkedList<Point> body = new LinkedList<Point>();
 
-        public Snake(Cell emptyCell, SnakeDirection direction)
+        public Snake(Point start, SnakeDirection direction)
         {
-            AddHeadCell(emptyCell);
+            body.AddFirst(start);
             Direction = direction;
         }
 
-        public IReadOnlyList<Cell> Body => body.ToList();
-
+        public IReadOnlyList<Point> Body => body.ToList().AsReadOnly();
+        public Point Head => body.First();
+        public Point Tail => body.Last();
         public SnakeDirection Direction { get; set; }
 
         public void Move(Map map)
         {
-            var head = body.First.Value;
-            var newX = head.X;
-            var newY = head.Y;
+            var newX = Head.X;
+            var newY = Head.Y;
             if (Direction == SnakeDirection.Up)
                 newY--;
             else if (Direction == SnakeDirection.Down)
@@ -30,28 +30,18 @@ namespace SnakeGame.Domain
                 newX--;
             else if (Direction == SnakeDirection.Right)
                 newX++;
-            var newHead = map[newX, newY];
-            AddHeadCell(newHead);
-            RemoveTailCell();
-        }
-
-        private void AddHeadCell(Cell cell)
-        {
-            cell.Creatures.Add(this);
-            body.AddFirst(cell);
-        }
-
-        private void RemoveTailCell()
-        {
-            var tail = body.Last.Value;
-            var food = tail.Creatures.SingleOrDefault(c => c is Food);
-            if (food != null)
-                tail.Creatures.Remove(food);
-            else
+            var newHead = map.GetNewPoint(newX, newY);
+            
+            if (map.IsSnake(newHead))
             {
-                tail.Creatures.Remove(this);
-                body.RemoveLast();
+                body.AddFirst(newHead);
+                throw new SnakeConflictException(newHead);
             }
+            
+            body.AddFirst(newHead);
+            if (map.IsFood(Tail))
+                map.RemoveFood(Tail);
+            else body.RemoveLast();
         }
     }
 }

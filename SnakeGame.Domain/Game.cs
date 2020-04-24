@@ -6,53 +6,58 @@ namespace SnakeGame.Domain
 {
     public class Game
     {
-        public Map Map { get; }
-        public List<Snake> Snakes { get; }
+        private readonly int foodFrequency;
         private readonly Random random = new Random();
+        private long tick = 0;
 
-        public Game(Map map, List<Snake> snakes)
+        public Game(Map map, int foodFrequency = 10)
         {
+            this.foodFrequency = foodFrequency;
             Map = map;
-            Snakes = snakes;
         }
 
         public void Tick()
         {
-            Snakes.ForEach(s => s.Move(Map));
-            var winners = Map
-                .Where(s => s.Creatures.Cast<Snake>().Count() > 2)
-                .Select(ResolveConflict);
-            var winner = winners
-                .GroupBy(x => x)
-                .OrderByDescending(x => x.Count())
-                .FirstOrDefault()?.Key;
-            if (winner != null)
-                throw new EndGameException(winner);
+            try
+            {
+                foreach (var snake in Map.Snakes)
+                    snake.Move(Map);
+
+                if (++tick % foodFrequency == 0)
+                    GenerateFood();
+            }
+            catch (SnakeConflictException e)
+            {
+                HandleConflict(e);
+            }
         }
 
-        private Snake ResolveConflict(Cell conflictCell)
+        private void GenerateFood()
         {
-            var conflictSnakes = conflictCell.Creatures.Cast<Snake>().ToList();
-            var nonConflictSnakes = Snakes.Where(s => !conflictSnakes.Contains(s)).ToList();
-
-            if (nonConflictSnakes.Count == 1)
-                return nonConflictSnakes.Single();
-
-            var okSnakes = conflictSnakes
-                .Where(x => x.Body.First() != conflictCell)
-                .ToList();
-
-            if (okSnakes.Count == 1)
-                return okSnakes.Single();
-
-            return conflictSnakes.OrderByDescending(s => s.Body.Count).First();
+            var points = Map.GetEmptyPoints().ToList();
+            if (points.Count == 0)
+                return;
+            if (points.Count == 1)
+                Map.AddFood(points.Single());
+            var randomIndex = random.Next(0, points.Count);
+            Map.AddFood(points[randomIndex]);
         }
 
-        public void GenerateFood()
+        private void HandleConflict(SnakeConflictException exception)
         {
-            var emptyCells = Map.Where(x => x.IsEmpty).ToList();
-            var randomIndex = random.Next(emptyCells.Count);
-            emptyCells[randomIndex].Creatures.Add(new Food());
+            var conflictPoint = exception.Point;
+            var conflictedSnakes = Map.Snakes.Where(s => s.Body.Contains(conflictPoint)).ToList();
+            var deadSnakes = conflictedSnakes.Where(s => s.Head.Equals(conflictPoint)).ToList();
+            deadSnakes.ForEach(Map.RemoveSnake);
+
+            if (Map.Snakes.Count == 1)
+                Winner = Map.Snakes.Single();
+
+            if (Map.Snakes.Count == 0)
+                Winner = deadSnakes.OrderByDescending(x => x.Body.Count).First();
         }
+
+        public Map Map { get; }
+        public Snake Winner { get; private set; }
     }
 }
