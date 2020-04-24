@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeGame.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="720" Width="1280" ResizeMode="NoResize">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <TextBox Grid.Row="0"
-                 Width="100"
-                 Height="30"
-                 Name="TextBox"/>
-        <Button Grid.Row="1"
-                Width="100"
-                Height="30"
-                Click="ButtonBase_OnClick" />
+        <!-- <Grid.RowDefinitions> -->
+        <!--     <RowDefinition /> -->
+        <!--     <RowDefinition /> -->
+        <!-- </Grid.RowDefinitions> -->
+        <!-- <TextBox Grid.Row="0" -->
+        <!--          Width="100" -->
+        <!--          Height="30" -->
+        <!--          Name="TextBox"/> -->
+        <!-- <Button Grid.Row="1" -->
+        <!--         Width="100" -->
+        <!--         Height="30" -->
+        <!--         Click="ButtonBase_OnClick" /> -->
+        <Canvas Name="Playground"
+                Height="500"
+                Width="1000"></Canvas>
     </Grid>
 </Window>
