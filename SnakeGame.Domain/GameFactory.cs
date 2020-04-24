@@ -20,7 +20,7 @@ namespace SnakeGame.Domain
             var emptyCells = map.GetEmptyPoints().ToList();
             var randomIndex = random.Next(emptyCells.Count);
             var direction = (SnakeDirection) random.Next(0, 4);
-            var snake = new Snake(emptyCells[randomIndex], direction);
+            var snake = new Snake(emptyCells[randomIndex], direction, "abc");
             map.AddSnake(snake);
         }
     }

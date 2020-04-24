@@ -20,7 +20,16 @@
         <!--         Height="30" -->
         <!--         Click="ButtonBase_OnClick" /> -->
         <Canvas Name="Playground"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="10"
                 Height="500"
-                Width="1000"></Canvas>
+                Width="1000">
+            <Border Height="501"
+                    Width="1001"
+                    BorderBrush="DimGray"
+                    BorderThickness="2"></Border>
+        </Canvas>
+        
     </Grid>
 </Window>

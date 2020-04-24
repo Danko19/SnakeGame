@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -17,33 +18,21 @@ namespace SnakeGame.Client
 
         public void Show(Map map)
         {
-            canvas.Visibility = Visibility.Visible;
             var stepX = canvas.Width / map.Width;
             var stepY = canvas.Height / map.Height;
-            for (var x = 0; x <= map.Width; x++)
-            {
-                var markupLine = CreateMarkupLine(x * stepX, x * stepX, 0, canvas.Height);
-                canvas.Children.Add(markupLine);
-            }
-
-            for (var y = 0; y <= map.Height; y++)
-            {
-                var markupLine = CreateMarkupLine(0, canvas.Width, y * stepY, y * stepY);
-                canvas.Children.Add(markupLine);
-            }
+            DrawSnake(map.Snakes.First(), stepX - 1);
         }
 
-        private Line CreateMarkupLine(double x1, double x2, double y1, double y2)
+        private void DrawSnake(Snake snake, double stepX, double stepY, double width)
         {
-            return new Line
+            var polyline = canvas.Children.Cast<Polyline>().SingleOrDefault(x => x.Name == snake.Name);
+            if (polyline == null)
             {
-                X1 = x1,
-                X2 = x2,
-                Y1 = y1,
-                Y2 = y2,
-                Stroke = Brushes.DimGray,
-                StrokeThickness = 1
-            };
+                polyline = new Polyline();
+                canvas.Children.Add(polyline);
+            }
+            
+            polyline.Points.First().
         }
     }
 }

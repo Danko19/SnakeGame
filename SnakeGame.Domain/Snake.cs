@@ -7,16 +7,18 @@ namespace SnakeGame.Domain
     {
         private readonly LinkedList<Point> body = new LinkedList<Point>();
 
-        public Snake(Point start, SnakeDirection direction)
+        public Snake(Point start, SnakeDirection direction, string name)
         {
             body.AddFirst(start);
             Direction = direction;
+            Name = name;
         }
 
         public IReadOnlyList<Point> Body => body.ToList().AsReadOnly();
         public Point Head => body.First();
         public Point Tail => body.Last();
         public SnakeDirection Direction { get; set; }
+        public string Name { get; }
 
         public void Move(Map map)
         {
