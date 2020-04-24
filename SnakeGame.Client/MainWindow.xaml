@@ -3,28 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SnakeGame.Client"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280" ResizeMode="NoResize">
+        Title="Snake" Height="560" Width="1200" ResizeMode="NoResize" Background="Azure">
     <Grid>
-        <!-- <Grid.RowDefinitions> -->
-        <!--     <RowDefinition /> -->
-        <!--     <RowDefinition /> -->
-        <!-- </Grid.RowDefinitions> -->
-        <!-- <TextBox Grid.Row="0" -->
-        <!--          Width="100" -->
-        <!--          Height="30" -->
-        <!--          Name="TextBox"/> -->
-        <!-- <Button Grid.Row="1" -->
-        <!--         Width="100" -->
-        <!--         Height="30" -->
-        <!--         Click="ButtonBase_OnClick" /> -->
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="100px" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <xctk:WatermarkTextBox
+            Grid.Row="1"
+            Width="150"
+            Height="30"
+            VerticalAlignment="Top"
+            Text="{Binding Ip, UpdateSourceTrigger=PropertyChanged}"
+            Watermark="Server Ip" />
+        <xctk:WatermarkTextBox
+            Grid.Row="1"
+            Width="150"
+            Height="30"
+            VerticalAlignment="Center"
+            Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"
+            Watermark="Nickname" />
+        <Button Grid.Row="1"
+                Width="150"
+                Height="30"
+                VerticalAlignment="Bottom"
+                Click="ButtonBase_OnClick">
+            Connect
+        </Button>
         <Canvas Name="Playground"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 Margin="10"
                 Height="500"
-                Width="1000">
+                Width="1000"
+                Visibility="Hidden">
             <Border Height="501"
                     Width="1001"
                     BorderBrush="DimGray"
