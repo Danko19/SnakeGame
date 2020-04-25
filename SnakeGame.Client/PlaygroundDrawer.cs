@@ -8,10 +8,12 @@ namespace SnakeGame.Client
     {
         private readonly Canvas canvas;
         private readonly Dictionary<string, SnakeDrawer> snakeDrawers = new Dictionary<string, SnakeDrawer>();
+        private readonly FoodDrawer foodDrawer;
 
         public PlaygroundDrawer(Canvas canvas)
         {
             this.canvas = canvas;
+            foodDrawer = new FoodDrawer(canvas);
         }
 
         public void Show(MapJsonModel map)
@@ -25,6 +27,7 @@ namespace SnakeGame.Client
                 snakeDrawers.Add(snake.Name, snakeDrawer);
                 snakeDrawer.Show(snake, step);
             }
+            foodDrawer.Show(map.Foods, step);
         }
 
         public void Update(MapJsonModel map)
@@ -35,6 +38,7 @@ namespace SnakeGame.Client
                 var snakeDrawer = snakeDrawers[snake.Name];
                 snakeDrawer.Update(snake, step);
             }
+            foodDrawer.Update(map.Foods, step);
         }
     }
 }

@@ -74,6 +74,7 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="FoodDrawer.cs" />
         <Compile Include="SnakeColors.cs" />
         <Compile Include="SnakeDrawer.cs" />
         <Compile Include="TcpServerHandler.cs" />

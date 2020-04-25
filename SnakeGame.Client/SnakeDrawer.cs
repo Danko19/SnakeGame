@@ -62,7 +62,8 @@ namespace SnakeGame.Client
                 Stroke = new SolidColorBrush(Colors.Black),
                 StrokeThickness = 0.2,
                 RadiusX = size / 3,
-                RadiusY = size / 3
+                RadiusY = size / 3,
+                Opacity = 0.75
             };
             Canvas.SetTop(rectangle, point.Y * size);
             Canvas.SetLeft(rectangle, point.X * size);

@@ -46,21 +46,15 @@ namespace SnakeGame.Server
                     udpClient.SendAsync(bytes, bytes.Length, player);
                 }
                 Thread.Sleep(3000);
-                new Thread(() =>
-                {
-                    while (true)
-                    {
-                        json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
-                        bytes = Encoding.UTF8.GetBytes(json);
-                        foreach (var player in players.Values)
-                        {
-                            udpClient.SendAsync(bytes, bytes.Length, player);
-                        }
-                    }
-                }).Start();
                 while (Game.Winner == null)
                 {
                     Game.Tick();
+                    json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
+                    bytes = Encoding.UTF8.GetBytes(json);
+                    foreach (var player in players.Values)
+                    {
+                        udpClient.SendAsync(bytes, bytes.Length, player);
+                    }
                     Thread.Sleep(100);
                 }
             }).Start();

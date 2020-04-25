@@ -52,7 +52,7 @@ namespace SnakeGame.Domain
             {
                 Name = Name,
                 Direction = Direction,
-                Body = new List<Point>(body)
+                Body = body.ToList()
             };
         }
     }
