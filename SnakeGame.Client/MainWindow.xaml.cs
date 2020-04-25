@@ -12,7 +12,7 @@ namespace SnakeGame.Client
     /// </summary>
     public partial class MainWindow
     {
-        private const int port = 32228;
+        public const int ServerPort = 32228;
         private readonly PlaygroundDrawer playgroundDrawer;
 
         public MainWindow()
@@ -29,7 +29,7 @@ namespace SnakeGame.Client
         {
             ConnectButton.IsEnabled = false;
             var tcpServerHandler = new TcpServerHandler(this);
-            var tcpClient = new TcpClient(Ip, port);
+            var tcpClient = new TcpClient(Ip, ServerPort);
             Task.Run(() => tcpServerHandler.Handle(tcpClient));
             ConnectButton.Visibility = Visibility.Hidden;
             IpInput.IsEnabled = false;

@@ -72,6 +72,7 @@ namespace SnakeGame.Client
                         }
                     } while (!start);
                 }
+
                 client.Close();
             }
             catch (ArgumentNullException e)
@@ -85,18 +86,7 @@ namespace SnakeGame.Client
 
         private void CreateUdp(int port)
         {
-            new Thread(() =>
-            {
-                var udpClient = new UdpClient(port);
-                var ipEndPoint = new IPEndPoint(IPAddress.Parse(mainWindow.Ip), 0);
-                var receive = udpClient.Receive(ref ipEndPoint);
-                mainWindow.ShowPlayground(receive);
-                while (true)
-                {
-                    receive = udpClient.Receive(ref ipEndPoint);
-                    mainWindow.UpdatePlayground(receive);
-                }
-            }).Start();
+            new Thread(() => { new UdpServerHandler(mainWindow).Handle(new UdpClient(port)); }).Start();
         }
     }
 }

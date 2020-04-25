@@ -1,10 +1,10 @@
 ﻿namespace SnakeGame.Domain
 {
-    public enum SnakeDirection
+    public enum SnakeDirection : byte
     {
         Up,
-        Down,
         Left,
+        Down,
         Right
     }
 }
