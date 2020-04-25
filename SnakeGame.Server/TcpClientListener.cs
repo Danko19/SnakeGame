@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace SnakeGame.Server
 {
-    public abstract class TcpHandlerBase
+    public class TcpClientListener
     {
-        private readonly int port;
-        private readonly string ip;
         private readonly TcpListener server;
+        private readonly Lobby lobby = new Lobby();
 
-        protected TcpHandlerBase(int port, string ip)
+        public TcpClientListener(int port, string ip)
         {
-            this.port = port;
-            this.ip = ip;
             server = new TcpListener(IPAddress.Parse(ip), port);
         }
 
@@ -22,14 +20,13 @@ namespace SnakeGame.Server
             try
             {
                 server.Start();
-                
+
                 while (true)
                 {
-                    Console.Write("Waiting for a connection... ");
+                    Console.WriteLine("Waiting for connection...");
                     var client = server.AcceptTcpClient();
                     Console.WriteLine("Connected!");
-                    HandleRequest(client);
-                    client.Close();
+                    Task.Run(() => new TcpClientHandler(lobby).Handle(client));
                 }
             }
             catch (SocketException e)
@@ -45,7 +42,5 @@ namespace SnakeGame.Server
             Console.WriteLine("\nHit enter to continue...");
             Console.Read();
         }
-
-        protected abstract void HandleRequest(TcpClient client);
     }
 }

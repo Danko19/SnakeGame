@@ -34,6 +34,10 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -72,6 +76,7 @@
         </ApplicationDefinition>
         <Compile Include="SnakeColors.cs" />
         <Compile Include="SnakeDrawer.cs" />
+        <Compile Include="TcpServerHandler.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -108,6 +113,10 @@
       <ProjectReference Include="..\SnakeGame.Domain\SnakeGame.Domain.csproj">
         <Project>{d0d945a7-eaa3-4715-ac4c-24b0fc3fef83}</Project>
         <Name>SnakeGame.Domain</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\SnakeGame.Server\SnakeGame.Server.csproj">
+        <Project>{9fbb6920-8755-43c2-a4df-070041f2d754}</Project>
+        <Name>SnakeGame.Server</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

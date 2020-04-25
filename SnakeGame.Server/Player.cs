@@ -1,16 +1,18 @@
-﻿using System.Net;
-
-namespace SnakeGame.Server
+﻿namespace SnakeGame.Server
 {
     public class Player
     {
-        public Player(string nickName, IPEndPoint endPoint)
+        public Player(string nickName)
         {
             NickName = nickName;
-            EndPoint = endPoint;
         }
 
         public string NickName { get; }
-        public IPEndPoint EndPoint { get; }
+        public bool Ready { get; set; }
+
+        public override string ToString()
+        {
+            return $"{NickName} ({(Ready ? "Ready" : "Not ready")})";
+        }
     }
 }

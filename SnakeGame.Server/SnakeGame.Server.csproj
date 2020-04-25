@@ -32,18 +32,34 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BinaryReaderExtensions.cs" />
         <Compile Include="Lobby.cs" />
-        <Compile Include="LoginHandler.cs" />
         <Compile Include="Player.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="TcpHandlerBase.cs" />
+        <Compile Include="TcpClientListener.cs" />
+        <Compile Include="TcpCommand.cs" />
+        <Compile Include="TcpClientHandler.cs" />
+        <Compile Include="TcpTerminal.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SnakeGame.Domain\SnakeGame.Domain.csproj">
+        <Project>{d0d945a7-eaa3-4715-ac4c-24b0fc3fef83}</Project>
+        <Name>SnakeGame.Domain</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

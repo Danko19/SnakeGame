@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SnakeGame.Domain
@@ -7,20 +8,22 @@ namespace SnakeGame.Domain
     {
         private readonly Random random = new Random();
 
-        public Game CreateNewGame(int width = 100, int height = 50, int snakesCount = 2)
+        public Game CreateNewGame(IEnumerable<string> players, int width = 100, int height = 50)
         {
             var map = new Map(width, height);
-            for (var i = 0; i < snakesCount; i++)
-                AddSnake(map);
+            foreach (var player in players)
+            {
+                AddSnake(map, player);
+            }
             return new Game(map);
         }
 
-        private void AddSnake(Map map)
+        private void AddSnake(Map map, string nickname)
         {
             var emptyCells = map.GetEmptyPoints().ToList();
             var randomIndex = random.Next(emptyCells.Count);
             var direction = (SnakeDirection) random.Next(0, 4);
-            var snake = new Snake(emptyCells[randomIndex], direction, "abc");
+            var snake = new Snake(emptyCells[randomIndex], direction, nickname);
             map.AddSnake(snake);
         }
     }

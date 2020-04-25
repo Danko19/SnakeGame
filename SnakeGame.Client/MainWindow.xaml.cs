@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace SnakeGame.Client
@@ -20,32 +19,23 @@ namespace SnakeGame.Client
             playgroundDrawer = new PlaygroundDrawer(Playground);
         }
 
-        public string Ip { get; set; } = "";
-        public string Nickname { get; set; } = "";
+        public string Ip { get; set; } = "127.0.0.1";
+        public string Nickname { get; set; } = "Danko";
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs es)
+        private void ConnectButton_OnClick(object sender, RoutedEventArgs es)
         {
-            try
-            {
-                var client = new TcpClient(Ip, port);
-        
-                using (var writer = new StreamWriter(client.GetStream()))
-                {
-                    writer.Write(Nickname);
-                }
-                client.Close();
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("ArgumentNullException: {0}", e);
-            }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
-            }
-        
-            Console.WriteLine("\n Press Enter to continue...");
-            Console.Read();
+            ConnectButton.IsEnabled = false;
+            var tcpServerHandler = new TcpServerHandler(this);
+            var tcpClient = new TcpClient(Ip, port);
+            Task.Run(() => tcpServerHandler.Handle(tcpClient));
+            ConnectButton.Visibility = Visibility.Hidden;
+            IpInput.IsEnabled = false;
+            IpInput.Visibility = Visibility.Hidden;
+            NicknameInput.IsEnabled = false;
+            NicknameInput.Visibility = Visibility.Hidden;
+            Playground.Visibility = Visibility.Visible;
+            Lobby.IsEnabled = true;
+            Lobby.Visibility = Visibility.Visible;
         }
     }
 }
