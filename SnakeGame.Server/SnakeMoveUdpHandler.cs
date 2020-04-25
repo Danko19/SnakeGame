@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,21 +9,26 @@ namespace SnakeGame.Server
 {
     public class SnakeMoveUdpHandler
     {
-        private readonly Snake snake;
+        private readonly Dictionary<IPEndPoint, Snake> snakes;
 
-        public SnakeMoveUdpHandler(Snake snake)
+        public SnakeMoveUdpHandler(Dictionary<IPEndPoint, Snake> snakes)
         {
-            this.snake = snake;
+            this.snakes = snakes;
         }
 
-        public Thread Run(UdpClient udpClient, IPEndPoint endPoint)
+        public Thread Run(UdpClient udpClient)
         {
             var thread = new Thread(start: () =>
             {
                 while (true)
                 {
-                    var receive = udpClient.Receive(ref endPoint).Single();
-                    var newDirection = (SnakeDirection) receive;
+                    IPEndPoint nEp = null;
+                    var receive = udpClient.Receive(ref nEp);
+                    if (receive.Length != 1)
+                        continue;
+
+                    var snake = snakes[nEp];
+                    var newDirection = (SnakeDirection) receive.Single();
                     var currentDirection = snake.Direction;
                     var diff = newDirection - currentDirection;
                     if (diff != 2 && diff != -2)

@@ -25,6 +25,7 @@ namespace SnakeGame.Server
         {
             new Thread(() =>
             {
+                var udpClient = new UdpClient(32228);
                 while (players.IsEmpty || players.Keys.Any(x => !x.Ready))
                 {
                     Thread.Sleep(100);
@@ -32,12 +33,10 @@ namespace SnakeGame.Server
 
                 Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
                 Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
-                var udpClient = new UdpClient(32228);
-                foreach (var snake in Game.Map.Snakes)
-                {
-                    var handler = new SnakeMoveUdpHandler(snake);
-                    handler.Run(udpClient, players.Single(x => x.Key.NickName == snake.Name).Value);
-                }
+                var dict = Game.Map.Snakes.ToDictionary(
+                    s => players.Single(x => x.Key.NickName == s.Name).Value,
+                    s => s);
+                var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);
                 Thread.Sleep(1000);
                 var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
                 var bytes = Encoding.UTF8.GetBytes(json);

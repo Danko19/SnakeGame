@@ -18,6 +18,7 @@ namespace SnakeGame.Client
 
         public void Handle(UdpClient udpClient)
         {
+            udpClient.Send(new byte[] {1, 2, 3}, 3, mainWindow.Ip, 32228);
             var ipEndPoint = new IPEndPoint(IPAddress.Parse(mainWindow.Ip), 0);
             var receive = udpClient.Receive(ref ipEndPoint);
             mainWindow.ShowPlayground(receive);
