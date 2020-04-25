@@ -23,7 +23,7 @@ namespace SnakeGame.Domain
                 foreach (var snake in Map.Snakes)
                     snake.Move(Map);
 
-                if (++tick % foodFrequency == 0)
+                if (tick++ % foodFrequency == 0)
                     GenerateFood();
             }
             catch (SnakeConflictException e)

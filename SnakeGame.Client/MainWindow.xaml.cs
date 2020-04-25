@@ -1,6 +1,9 @@
 ﻿using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Newtonsoft.Json;
+using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Client
 {
@@ -36,6 +39,20 @@ namespace SnakeGame.Client
             Playground.Visibility = Visibility.Visible;
             Lobby.IsEnabled = true;
             Lobby.Visibility = Visibility.Visible;
+        }
+
+        public void ShowPlayground(byte[] udpData)
+        {
+            var json = Encoding.UTF8.GetString(udpData);
+            var mapJsonModel = JsonConvert.DeserializeObject<MapJsonModel>(json);
+            Playground.Dispatcher.Invoke(() => playgroundDrawer.Show(mapJsonModel));
+        }
+
+        public void UpdatePlayground(byte[] udpData)
+        {
+            var json = Encoding.UTF8.GetString(udpData);
+            var mapJsonModel = JsonConvert.DeserializeObject<MapJsonModel>(json);
+            Playground.Dispatcher.Invoke(() => playgroundDrawer.Update(mapJsonModel));
         }
     }
 }

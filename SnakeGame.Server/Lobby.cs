@@ -3,7 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using SnakeGame.Domain;
 
 namespace SnakeGame.Server
@@ -28,7 +31,20 @@ namespace SnakeGame.Server
                 }
                 
                 Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
+                Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
+                var udpClient = new UdpClient(32228);
+                var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
+                var bytes = Encoding.UTF8.GetBytes(json);
+                udpClient.Send(bytes, bytes.Length, players.Single().Value);
                 Thread.Sleep(3000);
+                while (Game.Winner == null)
+                {
+                    Game.Tick();
+                    json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
+                    bytes = Encoding.UTF8.GetBytes(json);
+                    udpClient.Send(bytes, bytes.Length, players.Single().Value);
+                    Thread.Sleep(100);
+                }
             }).Start();
         }
 

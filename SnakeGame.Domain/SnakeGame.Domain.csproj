@@ -40,6 +40,8 @@
     <ItemGroup>
         <Compile Include="Game.cs" />
         <Compile Include="GameFactory.cs" />
+        <Compile Include="JsonModels\MapJsonModel.cs" />
+        <Compile Include="JsonModels\SnakeJsonModel.cs" />
         <Compile Include="Map.cs" />
         <Compile Include="Point.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

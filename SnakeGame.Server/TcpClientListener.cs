@@ -19,6 +19,7 @@ namespace SnakeGame.Server
         {
             try
             {
+                lobby.Run();
                 server.Start();
 
                 while (true)

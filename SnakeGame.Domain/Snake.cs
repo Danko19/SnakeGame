@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Domain
 {
@@ -35,14 +36,24 @@ namespace SnakeGame.Domain
             var newHead = map.GetNewPoint(newX, newY);
 
             var isConflict = map.IsSnake(newHead);
-            
+
             body.AddFirst(newHead);
             if (map.IsFood(Tail))
                 map.RemoveFood(Tail);
             else body.RemoveLast();
-            
+
             if (isConflict)
                 throw new SnakeConflictException(newHead);
+        }
+
+        public SnakeJsonModel ToJsonModel()
+        {
+            return new SnakeJsonModel
+            {
+                Name = Name,
+                Direction = Direction,
+                Body = new List<Point>(body)
+            };
         }
     }
 }

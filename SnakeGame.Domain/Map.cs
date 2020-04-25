@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Domain
 {
@@ -18,8 +19,12 @@ namespace SnakeGame.Domain
         {
             if (x >= Width)
                 x -= Width;
+            else if (x < 0)
+                x += Width;
             if (y >= Height)
                 y -= Height;
+            else if (y < 0)
+                y += Height;
             return new Point(x, y);
         }
 
@@ -76,5 +81,15 @@ namespace SnakeGame.Domain
         public int Height { get; }
         public IReadOnlyList<Snake> Snakes => snakes.AsReadOnly();
         public IReadOnlyList<Point> Foods => foods.ToList().AsReadOnly();
+        public MapJsonModel ToJsonModel()
+        {
+            return new MapJsonModel
+            {
+                Snakes = Snakes.Select(x => x.ToJsonModel()).ToList(),
+                Foods = Foods.ToList(),
+                Height = Height,
+                Width = Width
+            };
+        }
     }
 }

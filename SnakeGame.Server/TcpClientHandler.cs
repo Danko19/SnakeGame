@@ -46,10 +46,12 @@ namespace SnakeGame.Server
 
         private void NotifyPlayersList(TcpTerminal terminal)
         {
-            while (lobby.Game == null)
+            while (true)
             {
                 var command = new TcpCommand("PLAYERS", JsonConvert.SerializeObject(lobby.Players));
                 terminal.WriteCommand(command);
+                if (lobby.Game != null)
+                    return;
                 Thread.Sleep(1000);
             }
         }

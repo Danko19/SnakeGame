@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using Newtonsoft.Json;
+using SnakeGame.Domain.JsonModels;
 using SnakeGame.Server;
 
 namespace SnakeGame.Client
@@ -22,6 +25,8 @@ namespace SnakeGame.Client
         {
             try
             {
+                var usedPort = ((IPEndPoint) client.Client.LocalEndPoint).Port;
+                CreateUdp(usedPort);
                 using (var tcpTerminal = new TcpTerminal(client))
                 {
                     tcpTerminal.WriteCommand(new TcpCommand("LOGIN", mainWindow.Nickname));
@@ -67,7 +72,6 @@ namespace SnakeGame.Client
                         }
                     } while (!start);
                 }
-
                 client.Close();
             }
             catch (ArgumentNullException e)
@@ -76,6 +80,23 @@ namespace SnakeGame.Client
             catch (SocketException e)
             {
             }
+        }
+
+
+        private void CreateUdp(int port)
+        {
+            new Thread(() =>
+            {
+                var udpClient = new UdpClient(port);
+                var ipEndPoint = new IPEndPoint(IPAddress.Parse(mainWindow.Ip), 0);
+                var receive = udpClient.Receive(ref ipEndPoint);
+                mainWindow.ShowPlayground(receive);
+                while (true)
+                {
+                    receive = udpClient.Receive(ref ipEndPoint);
+                    mainWindow.UpdatePlayground(receive);
+                }
+            }).Start();
         }
     }
 }

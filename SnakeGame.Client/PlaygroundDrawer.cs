@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using SnakeGame.Domain;
+using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Client
 {
@@ -14,7 +14,7 @@ namespace SnakeGame.Client
             this.canvas = canvas;
         }
 
-        public void Show(Map map)
+        public void Show(MapJsonModel map)
         {
             var step = canvas.Width / map.Width;
             for (var i = 0; i < map.Snakes.Count; i++)
@@ -27,7 +27,7 @@ namespace SnakeGame.Client
             }
         }
 
-        public void Update(Map map)
+        public void Update(MapJsonModel map)
         {
             var step = canvas.Width / map.Width;
             foreach (var snake in map.Snakes)

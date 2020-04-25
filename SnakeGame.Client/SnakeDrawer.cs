@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using SnakeGame.Domain;
+using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Client
 {
@@ -19,13 +20,13 @@ namespace SnakeGame.Client
             this.color = color;
         }
 
-        public void Show(Snake snake, double size)
+        public void Show(SnakeJsonModel snake, double size)
         {
             foreach (var point in snake.Body)
                 AddSnakeSegment(point, CreateRectangle(point, size));
         }
 
-        public void Update(Snake snake, double size)
+        public void Update(SnakeJsonModel snake, double size)
         {
             var points = snake.Body.ToHashSet();
             var pointsToAdd = points.Except(rectangles.Keys).ToList();
