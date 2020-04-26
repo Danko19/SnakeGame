@@ -52,11 +52,6 @@ namespace SnakeGame.Domain
             snakes.Add(snake);
         }
 
-        public void RemoveSnake(Snake snake)
-        {
-            snakes.Remove(snake);
-        }
-
         public void AddFood(Point foodPoint)
         {
             foods.Add(foodPoint);
@@ -81,6 +76,8 @@ namespace SnakeGame.Domain
         public int Height { get; }
         public IReadOnlyList<Snake> Snakes => snakes.AsReadOnly();
         public IReadOnlyList<Point> Foods => foods.ToList().AsReadOnly();
+        public string Winner { get; set; }
+
         public MapJsonModel ToJsonModel()
         {
             return new MapJsonModel
@@ -88,7 +85,8 @@ namespace SnakeGame.Domain
                 Snakes = Snakes.Select(x => x.ToJsonModel()).ToList(),
                 Foods = Foods.ToList(),
                 Height = Height,
-                Width = Width
+                Width = Width,
+                Winner = Winner
             };
         }
     }

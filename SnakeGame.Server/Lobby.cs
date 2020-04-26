@@ -32,12 +32,12 @@ namespace SnakeGame.Server
                 }
 
                 Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
+                Thread.Sleep(1000);
                 Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
                 var dict = Game.Map.Snakes.ToDictionary(
                     s => players.Single(x => x.Key.NickName == s.Name).Value,
                     s => s);
                 var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);
-                Thread.Sleep(1000);
                 var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
                 var bytes = Encoding.UTF8.GetBytes(json);
                 foreach (var player in players.Values)
@@ -45,7 +45,7 @@ namespace SnakeGame.Server
                     udpClient.SendAsync(bytes, bytes.Length, player);
                 }
                 Thread.Sleep(3000);
-                while (Game.Winner == null)
+                while (Game.Map.Winner == null)
                 {
                     Game.Tick();
                     json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());

@@ -46,6 +46,11 @@ namespace SnakeGame.Domain
                 throw new SnakeConflictException(newHead);
         }
 
+        public void Remove()
+        {
+            body.Clear();
+        }
+
         public SnakeJsonModel ToJsonModel()
         {
             return new SnakeJsonModel

@@ -52,7 +52,7 @@ namespace SnakeGame.Server
                 terminal.WriteCommand(command);
                 if (lobby.Game != null)
                     return;
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
     }

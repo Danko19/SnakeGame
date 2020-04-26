@@ -45,14 +45,14 @@ namespace SnakeGame.Client
         {
             var json = Encoding.UTF8.GetString(udpData);
             var mapJsonModel = JsonConvert.DeserializeObject<MapJsonModel>(json);
-            Playground.Dispatcher.Invoke(() => playgroundDrawer.Show(mapJsonModel));
+            Playground.Dispatcher.Invoke(() => playgroundDrawer.Show(mapJsonModel, Players));
         }
 
         public void UpdatePlayground(byte[] udpData)
         {
             var json = Encoding.UTF8.GetString(udpData);
             var mapJsonModel = JsonConvert.DeserializeObject<MapJsonModel>(json);
-            Playground.Dispatcher.Invoke(() => playgroundDrawer.Update(mapJsonModel));
+            Playground.Dispatcher.Invoke(() => playgroundDrawer.Update(mapJsonModel, Players));
         }
     }
 }

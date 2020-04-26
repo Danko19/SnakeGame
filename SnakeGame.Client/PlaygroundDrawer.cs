@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Client
@@ -16,9 +19,10 @@ namespace SnakeGame.Client
             foodDrawer = new FoodDrawer(canvas);
         }
 
-        public void Show(MapJsonModel map)
+        public void Show(MapJsonModel map, ListBox players)
         {
             var step = canvas.Width / map.Width;
+            players.Items.Clear();
             for (var i = 0; i < map.Snakes.Count; i++)
             {
                 var color = SnakeColors.PreparedColors[i];
@@ -26,11 +30,13 @@ namespace SnakeGame.Client
                 var snake = map.Snakes[i];
                 snakeDrawers.Add(snake.Name, snakeDrawer);
                 snakeDrawer.Show(snake, step);
+                players.Items.Add(new TextBlock {Background = new SolidColorBrush(color), Text = snake.Name});
             }
+
             foodDrawer.Show(map.Foods, step);
         }
 
-        public void Update(MapJsonModel map)
+        public void Update(MapJsonModel map, ListBox players)
         {
             var step = canvas.Width / map.Width;
             foreach (var snake in map.Snakes)
@@ -38,7 +44,13 @@ namespace SnakeGame.Client
                 var snakeDrawer = snakeDrawers[snake.Name];
                 snakeDrawer.Update(snake, step);
             }
+
             foodDrawer.Update(map.Foods, step);
+            if (map.Winner != null)
+            {
+                var textBlock = players.Items.Cast<TextBlock>().Single(x => x.Text == map.Winner);
+                textBlock.Text = $"{map.Winner} -Winner!";
+            }
         }
     }
 }

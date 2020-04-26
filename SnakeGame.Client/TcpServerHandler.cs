@@ -68,7 +68,6 @@ namespace SnakeGame.Client
                         if (command?.Method == "START")
                         {
                             start = true;
-                            Thread.Sleep(3000);
                         }
                     } while (!start);
                 }

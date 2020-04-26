@@ -47,16 +47,15 @@ namespace SnakeGame.Domain
             var conflictPoint = exception.Point;
             var conflictedSnakes = Map.Snakes.Where(s => s.Body.Contains(conflictPoint)).ToList();
             var deadSnakes = conflictedSnakes.Where(s => s.Head.Equals(conflictPoint)).ToList();
-            deadSnakes.ForEach(Map.RemoveSnake);
+            deadSnakes.ForEach(x => x.Remove());
 
             if (Map.Snakes.Count == 1)
-                Winner = Map.Snakes.Single();
+                Map.Winner = Map.Snakes.Single().Name;
 
             if (Map.Snakes.Count == 0)
-                Winner = deadSnakes.OrderByDescending(x => x.Body.Count).First();
+                Map.Winner = deadSnakes.OrderByDescending(x => x.Body.Count).First().Name;
         }
 
         public Map Map { get; }
-        public Snake Winner { get; private set; }
     }
 }
