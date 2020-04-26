@@ -34,7 +34,7 @@ namespace SnakeGame.Server
                 Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
                 Thread.Sleep(1000);
                 Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
-                var dict = Game.Map.Snakes.ToDictionary(
+                var dict = Game.Map.AliveSnakes.ToDictionary(
                     s => players.Single(x => x.Key.NickName == s.Name).Value,
                     s => s);
                 var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);

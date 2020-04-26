@@ -69,12 +69,12 @@ namespace SnakeGame.Domain
 
         public bool IsSnake(Point point)
         {
-            return snakes.SelectMany(x => x.Body).ToHashSet().Contains(point);
+            return AliveSnakes.SelectMany(x => x.Body).ToHashSet().Contains(point);
         }
 
         public int Width { get; }
         public int Height { get; }
-        public IReadOnlyList<Snake> Snakes => snakes.AsReadOnly();
+        public IReadOnlyList<Snake> AliveSnakes => snakes.Where(x => !x.IsDead).ToList().AsReadOnly();
         public IReadOnlyList<Point> Foods => foods.ToList().AsReadOnly();
         public string Winner { get; set; }
 
@@ -82,7 +82,7 @@ namespace SnakeGame.Domain
         {
             return new MapJsonModel
             {
-                Snakes = Snakes.Select(x => x.ToJsonModel()).ToList(),
+                Snakes = snakes.Select(x => x.ToJsonModel()).ToList(),
                 Foods = Foods.ToList(),
                 Height = Height,
                 Width = Width,

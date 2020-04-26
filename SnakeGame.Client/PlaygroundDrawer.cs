@@ -41,15 +41,23 @@ namespace SnakeGame.Client
             var step = canvas.Width / map.Width;
             foreach (var snake in map.Snakes)
             {
-                var snakeDrawer = snakeDrawers[snake.Name];
+                if (!snakeDrawers.TryGetValue(snake.Name, out var snakeDrawer))
+                    continue;
+
                 snakeDrawer.Update(snake, step);
+                if (snake.IsDead)
+                {
+                    snakeDrawers.Remove(snake.Name);
+                    var textBlock = players.Items.Cast<TextBlock>().Single(x => x.Text.StartsWith(snake.Name));
+                    textBlock.Text = $"{snake.Name} - Dead";
+                }
             }
 
             foodDrawer.Update(map.Foods, step);
             if (map.Winner != null)
             {
-                var textBlock = players.Items.Cast<TextBlock>().Single(x => x.Text == map.Winner);
-                textBlock.Text = $"{map.Winner} -Winner!";
+                var textBlock = players.Items.Cast<TextBlock>().Single(x => x.Text.StartsWith(map.Winner));
+                textBlock.Text = $"{map.Winner} - Winner!";
             }
         }
     }

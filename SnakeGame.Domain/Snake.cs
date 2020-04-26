@@ -20,6 +20,7 @@ namespace SnakeGame.Domain
         public Point Tail => body.Last();
         public SnakeDirection Direction { get; set; }
         public string Name { get; }
+        public bool IsDead { get; set; }
 
         public void Move(Map map)
         {
@@ -47,18 +48,14 @@ namespace SnakeGame.Domain
                 throw new SnakeConflictException(newHead);
         }
 
-        public void Remove()
-        {
-            body.Clear();
-        }
-
         public SnakeJsonModel ToJsonModel()
         {
             return new SnakeJsonModel
             {
                 Name = Name,
                 Direction = Direction,
-                Body = body.ToList()
+                Body = body.ToList(),
+                IsDead = IsDead
             };
         }
     }

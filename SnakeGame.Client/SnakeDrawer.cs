@@ -28,7 +28,7 @@ namespace SnakeGame.Client
 
         public void Update(SnakeJsonModel snake, double size)
         {
-            var points = snake.Body.ToHashSet();
+            var points = snake.IsDead ? new HashSet<Point>() : snake.Body.ToHashSet();
             var pointsToAdd = points.Except(rectangles.Keys).ToList();
             var pointsToRemove = rectangles.Keys.Except(points).ToList();
 

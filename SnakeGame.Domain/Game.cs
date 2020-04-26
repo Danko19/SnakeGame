@@ -19,7 +19,7 @@ namespace SnakeGame.Domain
         {
             try
             {
-                foreach (var snake in Map.Snakes)
+                foreach (var snake in Map.AliveSnakes)
                     snake.Move(Map);
 
                 if (tick++ % foodFrequency == 0)
@@ -45,14 +45,14 @@ namespace SnakeGame.Domain
         private void HandleConflict(SnakeConflictException exception)
         {
             var conflictPoint = exception.Point;
-            var conflictedSnakes = Map.Snakes.Where(s => s.Body.Contains(conflictPoint)).ToList();
+            var conflictedSnakes = Map.AliveSnakes.Where(s => s.Body.Contains(conflictPoint)).ToList();
             var deadSnakes = conflictedSnakes.Where(s => s.Head.Equals(conflictPoint)).ToList();
-            deadSnakes.ForEach(x => x.Remove());
+            deadSnakes.ForEach(x => x.IsDead = true);
 
-            if (Map.Snakes.Count == 1)
-                Map.Winner = Map.Snakes.Single().Name;
+            if (Map.AliveSnakes.Count == 1)
+                Map.Winner = Map.AliveSnakes.Single().Name;
 
-            if (Map.Snakes.Count == 0)
+            if (Map.AliveSnakes.Count == 0)
                 Map.Winner = deadSnakes.OrderByDescending(x => x.Body.Count).First().Name;
         }
 
