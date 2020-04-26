@@ -22,8 +22,8 @@ namespace SnakeGame.Client
             playgroundDrawer = new PlaygroundDrawer(Playground);
         }
 
-        public string Ip { get; set; } = "127.0.0.1";
-        public string Nickname { get; set; } = "Danko";
+        public string Ip { get; set; }
+        public string Nickname { get; set; }
 
         private void ConnectButton_OnClick(object sender, RoutedEventArgs es)
         {
