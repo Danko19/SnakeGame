@@ -31,7 +31,7 @@ namespace SnakeGame.Server
                     var newDirection = (SnakeDirection) receive.Single();
                     var currentDirection = snake.Direction;
                     var diff = newDirection - currentDirection;
-                    if (diff != 2 && diff != -2)
+                    if (diff != 2 && diff != 254)
                         snake.Direction = newDirection;
                 }
             });

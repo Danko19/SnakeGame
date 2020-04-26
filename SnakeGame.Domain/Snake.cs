@@ -25,13 +25,14 @@ namespace SnakeGame.Domain
         {
             var newX = Head.X;
             var newY = Head.Y;
-            if (Direction == SnakeDirection.Up)
+            var direction = Direction;
+            if (direction == SnakeDirection.Up)
                 newY--;
-            else if (Direction == SnakeDirection.Down)
+            else if (direction == SnakeDirection.Down)
                 newY++;
-            else if (Direction == SnakeDirection.Left)
+            else if (direction == SnakeDirection.Left)
                 newX--;
-            else if (Direction == SnakeDirection.Right)
+            else if (direction == SnakeDirection.Right)
                 newX++;
             var newHead = map.GetNewPoint(newX, newY);
 
