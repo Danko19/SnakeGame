@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -47,8 +48,10 @@ namespace SnakeGame.Server
                 }
 
                 Thread.Sleep(3000);
+                var sw = new Stopwatch();
                 while (Game.Map.Winner == null)
                 {
+                    sw.Restart();
                     foreach (var controllers in dict.Values)
                     {
                         controllers.ApplyCommand();
@@ -62,7 +65,9 @@ namespace SnakeGame.Server
                         udpClient.SendAsync(bytes, bytes.Length, player);
                     }
 
-                    Thread.Sleep(100);
+                    var sleep = 100 - sw.ElapsedMilliseconds;
+                    if (sleep > 0)
+                        Thread.Sleep(TimeSpan.FromMilliseconds(sleep));
                 }
             }).Start();
         }
