@@ -9,7 +9,11 @@ namespace SnakeGame.Client
             Colors.Lime,
             Colors.Orange,
             Colors.DarkOrchid,
-            Colors.Aqua
+            Colors.Aqua,
+            Colors.Red,
+            Colors.MediumBlue,
+            Colors.Yellow,
+            Colors.Gray 
         };
     }
 }
