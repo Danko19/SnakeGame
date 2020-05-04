@@ -79,15 +79,15 @@ namespace SnakeGame.Client
 
         private void DrawEyes(SnakeJsonModel snake, bool update = false)
         {
-            var head = snake.Body.FirstOrDefault();
-            if (head == null)
-                return;
-
             if (update)
             {
                 foreach (var eye in eyes)
                     canvas.Children.Remove(eye);
             }
+
+            var head = snake.Body.FirstOrDefault();
+            if (head == null)
+                return;
 
             (eyes[0], eyes[1]) = GetEyes(new Point(head.X * 10, head.Y * 10), snake.Direction);
             foreach (var eye in eyes)
