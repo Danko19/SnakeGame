@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -27,14 +28,15 @@ namespace SnakeGame.Server
                     return;
                 var nickName = command.Data;
                 Console.WriteLine($"{nickName} is logged in");
-                var player = new Player(nickName);
-                lobby.AddPlayer(player, endPoint);
+                var player = new Player(nickName, endPoint.Address);
+                lobby.AddPlayer(player);
 
                 var waitAllTask = Task.Run(() => NotifyPlayersList(tcpTerminal));
 
                 command = tcpTerminal.ReadCommand();
                 if (command.Method != "READY")
                     return;
+                player.UdpPort = int.Parse(command.Data);
                 Console.WriteLine($"{nickName} is ready");
                 player.Ready = true;
                 waitAllTask.Wait();

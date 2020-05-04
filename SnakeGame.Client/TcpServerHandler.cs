@@ -25,14 +25,14 @@ namespace SnakeGame.Client
         {
             try
             {
-                var usedPort = ((IPEndPoint) client.Client.LocalEndPoint).Port;
-                CreateUdp(usedPort);
+                var nextUdpPort = PortFinder.NextFreePort();
+                CreateUdp(nextUdpPort);
                 using (var tcpTerminal = new TcpTerminal(client))
                 {
                     tcpTerminal.WriteCommand(new TcpCommand("LOGIN", mainWindow.Nickname));
                     mainWindow.ReadyButton.Click += (o, e) =>
                     {
-                        tcpTerminal.WriteCommand(new TcpCommand("READY", ""));
+                        tcpTerminal.WriteCommand(new TcpCommand("READY", nextUdpPort.ToString()));
                         mainWindow.ReadyButton.Dispatcher.Invoke(() =>
                         {
                             mainWindow.ReadyButton.Visibility = Visibility.Hidden;
@@ -81,7 +81,6 @@ namespace SnakeGame.Client
             {
             }
         }
-
 
         private void CreateUdp(int port)
         {

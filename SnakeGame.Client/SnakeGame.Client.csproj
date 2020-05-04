@@ -75,6 +75,7 @@
             <SubType>Designer</SubType>
         </ApplicationDefinition>
         <Compile Include="FoodDrawer.cs" />
+        <Compile Include="PortFinder.cs" />
         <Compile Include="SnakeColors.cs" />
         <Compile Include="SnakeDrawer.cs" />
         <Compile Include="TcpServerHandler.cs" />

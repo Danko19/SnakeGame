@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Windows.Input;
 using SnakeGame.Domain;
-using SnakeGame.Domain.JsonModels;
 
 namespace SnakeGame.Client
 {
