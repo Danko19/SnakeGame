@@ -9,9 +9,9 @@ namespace SnakeGame.Server
 {
     public class SnakeMoveUdpHandler
     {
-        private readonly Dictionary<IPEndPoint, Snake> snakes;
+        private readonly Dictionary<IPEndPoint, SnakeController> snakes;
 
-        public SnakeMoveUdpHandler(Dictionary<IPEndPoint, Snake> snakes)
+        public SnakeMoveUdpHandler(Dictionary<IPEndPoint, SnakeController> snakes)
         {
             this.snakes = snakes;
         }
@@ -29,10 +29,7 @@ namespace SnakeGame.Server
 
                     var snake = snakes[nEp];
                     var newDirection = (SnakeDirection) receive.Single();
-                    var currentDirection = snake.Direction;
-                    var diff = newDirection - currentDirection;
-                    if (diff != 2 && diff != 254)
-                        snake.Direction = newDirection;
+                    snake.EnqueueCommand(newDirection);
                 }
             });
             thread.Start();

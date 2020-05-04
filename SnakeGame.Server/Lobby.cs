@@ -36,7 +36,7 @@ namespace SnakeGame.Server
                 Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
                 var dict = Game.Map.AliveSnakes.ToDictionary(
                     s => GetUdpEndPoint(players.Single(p => p.NickName == s.Name)),
-                    s => s);
+                    s => new SnakeController(s));
                 var endPoints = dict.Keys.ToList();
                 var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);
                 var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
@@ -49,6 +49,11 @@ namespace SnakeGame.Server
                 Thread.Sleep(3000);
                 while (Game.Map.Winner == null)
                 {
+                    foreach (var controllers in dict.Values)
+                    {
+                        controllers.ApplyCommand();
+                    }
+
                     Game.Tick();
                     json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
                     bytes = Encoding.UTF8.GetBytes(json);

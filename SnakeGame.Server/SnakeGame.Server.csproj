@@ -47,6 +47,7 @@
         <Compile Include="Player.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="SnakeController.cs" />
         <Compile Include="SnakeMoveUdpHandler.cs" />
         <Compile Include="TcpClientListener.cs" />
         <Compile Include="TcpCommand.cs" />
