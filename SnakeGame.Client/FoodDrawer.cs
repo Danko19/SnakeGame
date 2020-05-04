@@ -56,14 +56,14 @@ namespace SnakeGame.Client
         {
             var ellipse = new Ellipse
             {
-                Width = size - 1,
-                Height = size - 1,
+                Width = size - 2,
+                Height = size - 2,
                 Fill = new SolidColorBrush(Colors.Red),
                 Stroke = new SolidColorBrush(Colors.Black),
                 StrokeThickness = 0.2,
             };
-            Canvas.SetTop(ellipse, point.Y * size);
-            Canvas.SetLeft(ellipse, point.X * size);
+            Canvas.SetTop(ellipse, point.Y * size + 1);
+            Canvas.SetLeft(ellipse, point.X * size + 1);
             Canvas.SetZIndex(ellipse, -1);
             return ellipse;
         }
