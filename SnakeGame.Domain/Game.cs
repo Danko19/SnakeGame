@@ -5,13 +5,10 @@ namespace SnakeGame.Domain
 {
     public class Game
     {
-        private readonly int foodFrequency;
         private readonly Random random = new Random();
-        private long tick = 0;
 
-        public Game(Map map, int foodFrequency = 10)
+        public Game(Map map)
         {
-            this.foodFrequency = foodFrequency;
             Map = map;
         }
 
@@ -19,11 +16,9 @@ namespace SnakeGame.Domain
         {
             try
             {
+                GenerateFood();
                 foreach (var snake in Map.AliveSnakes)
                     snake.Move(Map);
-
-                if (tick++ % foodFrequency == 0)
-                    GenerateFood();
             }
             catch (SnakeConflictException e)
             {
@@ -33,13 +28,17 @@ namespace SnakeGame.Domain
 
         private void GenerateFood()
         {
-            var points = Map.GetEmptyPoints().ToList();
-            if (points.Count == 0)
+            var snakes = Map.AliveSnakes.Count;
+            var foods = Map.Foods.Count;
+            var foodToGenerate = snakes * 2 - foods;
+            if (foodToGenerate == 0)
                 return;
-            if (points.Count == 1)
-                Map.AddFood(points.Single());
-            var randomIndex = random.Next(0, points.Count);
-            Map.AddFood(points[randomIndex]);
+            var points = Map.GetEmptyPoints().ToList();
+            var newFood = points.OrderBy(_ => random.Next()).Take(foodToGenerate).ToArray();
+            foreach (var food in newFood)
+            {
+                Map.AddFood(food);
+            }
         }
 
         private void HandleConflict(SnakeConflictException exception)
