@@ -89,12 +89,12 @@ namespace SnakeGame.Client
             if (head == null)
                 return;
 
-            (eyes[0], eyes[1]) = GetEyes(new Point(head.X * 10, head.Y * 10), snake.Direction);
+            UpdateEyes(new Point(head.X * 10, head.Y * 10), snake.Direction);
             foreach (var eye in eyes)
                 canvas.Children.Add(eye);
         }
 
-        private (Ellipse, Ellipse) GetEyes(Point point, SnakeDirection direction)
+        private void UpdateEyes(Point point, SnakeDirection direction)
         {
             var eye1 = new Ellipse
             {
@@ -108,29 +108,32 @@ namespace SnakeGame.Client
                 Height = 2,
                 Fill = new SolidColorBrush(Colors.Black)
             };
-            var (point1, point2) = GetEyesPoints(point, direction);
+            var points = GetEyesPoints(point, direction);
+            var point1 = points[0];
+            var point2 = points[1];
             Canvas.SetTop(eye1, point1.Y);
             Canvas.SetLeft(eye1, point1.X);
             Canvas.SetZIndex(eye1, 1);
             Canvas.SetTop(eye2, point2.Y);
             Canvas.SetLeft(eye2, point2.X);
             Canvas.SetZIndex(eye2, 1);
-            return (eye1, eye2);
+            eyes[0] = eye1;
+            eyes[1] = eye2;
         }
 
-        private (Point, Point) GetEyesPoints(Point point, SnakeDirection direction)
+        private static Point[] GetEyesPoints(Point point, SnakeDirection direction)
         {
             Point TopLeft() => new Point(point.X + 1, point.Y + 1);
             Point TopRight() => new Point(point.X + 7, point.Y + 1);
             Point BottomLeft() => new Point(point.X + 1, point.Y + 7);
             Point BottomRight() => new Point(point.X + 7, point.Y + 7);
             if (direction == SnakeDirection.Up)
-                return (TopLeft(), TopRight());
+                return new[] {TopLeft(), TopRight()};
             if (direction == SnakeDirection.Down)
-                return (BottomLeft(), BottomRight());
+                return new[] {BottomLeft(), BottomRight()};
             if (direction == SnakeDirection.Left)
-                return (TopLeft(), BottomLeft());
-            return (TopRight(), BottomRight());
+                return new[] {TopLeft(), BottomLeft()};
+            return new[] {TopRight(), BottomRight()};
         }
     }
 }
