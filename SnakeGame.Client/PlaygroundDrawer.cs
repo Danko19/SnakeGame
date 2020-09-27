@@ -40,15 +40,14 @@ namespace SnakeGame.Client
             var step = canvas.Width / map.Width;
             foreach (var snake in map.Snakes)
             {
-                if (!snakeDrawers.TryGetValue(snake.Name, out var snakeDrawer))
-                    continue;
-
-                snakeDrawer.Update(snake, step);
+                snakeDrawers[snake.Name].Update(snake, step);
                 if (snake.IsDead)
                 {
-                    snakeDrawers.Remove(snake.Name);
                     var textBlock = players.Items.Cast<TextBlock>().Single(x => x.Text.StartsWith(snake.Name));
-                    textBlock.Text = $"{snake.Name} - Dead";
+                    if (!textBlock.Text.EndsWith("Dead"))
+                    {
+                        textBlock.Text = $"{snake.Name} - Dead";
+                    }
                 }
             }
 

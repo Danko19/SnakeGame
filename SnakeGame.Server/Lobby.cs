@@ -32,47 +32,57 @@ namespace SnakeGame.Server
                     Thread.Sleep(100);
                 }
 
-                Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
-                Thread.Sleep(1000);
-                Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
-                var dict = Game.Map.AliveSnakes.ToDictionary(
-                    s => GetUdpEndPoint(players.Single(p => p.NickName == s.Name)),
-                    s => new SnakeController(s));
-                var endPoints = dict.Keys.ToList();
-                var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);
-                var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
-                var bytes = Encoding.UTF8.GetBytes(json);
+                while (true)
+                {
+                    StartNewGame(udpClient);
+                }
+            }).Start();
+        }
+
+        private void StartNewGame(UdpClient udpClient)
+        {
+            Game = new GameFactory().CreateNewGame(Players.Select(x => x.NickName).ToList());
+            Thread.Sleep(1000);
+            Console.WriteLine($"Created game for players {string.Join(", ", Players.Select(x => x.NickName))}");
+            var dict = Game.Map.AliveSnakes.ToDictionary(
+                s => GetUdpEndPoint(players.Single(p => p.NickName == s.Name)),
+                s => new SnakeController(s));
+            var endPoints = dict.Keys.ToList();
+            var handler = new SnakeMoveUdpHandler(dict).Run(udpClient);
+            var json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
+            var bytes = Encoding.UTF8.GetBytes(json);
+            foreach (var player in endPoints)
+            {
+                udpClient.SendAsync(bytes, bytes.Length, player);
+            }
+
+            Thread.Sleep(3000);
+            var sw = new Stopwatch();
+            while (Game.Map.Winner == null)
+            {
+                sw.Restart();
+                foreach (var controllers in dict.Values)
+                {
+                    controllers.ApplyCommand();
+                }
+
+                Game.Tick();
+                json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
+                bytes = Encoding.UTF8.GetBytes(json);
                 foreach (var player in endPoints)
                 {
                     udpClient.SendAsync(bytes, bytes.Length, player);
                 }
 
-                Thread.Sleep(3000);
-                var sw = new Stopwatch();
-                while (Game.Map.Winner == null)
-                {
-                    sw.Restart();
-                    foreach (var controllers in dict.Values)
-                    {
-                        controllers.ApplyCommand();
-                    }
+                var sleep = 100 - sw.ElapsedMilliseconds;
+                if (sleep > 0)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(sleep));
+            }
 
-                    Game.Tick();
-                    json = JsonConvert.SerializeObject(Game.Map.ToJsonModel());
-                    bytes = Encoding.UTF8.GetBytes(json);
-                    foreach (var player in endPoints)
-                    {
-                        udpClient.SendAsync(bytes, bytes.Length, player);
-                    }
-
-                    var sleep = 100 - sw.ElapsedMilliseconds;
-                    if (sleep > 0)
-                        Thread.Sleep(TimeSpan.FromMilliseconds(sleep));
-                }
-            }).Start();
+            handler.Abort();
         }
 
-        private IPEndPoint GetUdpEndPoint(Player player)
+        private static IPEndPoint GetUdpEndPoint(Player player)
         {
             return new IPEndPoint(player.Ip, player.UdpPort);
         }

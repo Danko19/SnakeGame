@@ -20,6 +20,11 @@ namespace SnakeGame.Client
         {
             udpClient.Send(new byte[] {1, 2, 3}, 3, mainWindow.Ip, 32228);
             var ipEndPoint = new IPEndPoint(IPAddress.Parse(mainWindow.Ip), 0);
+            PlayGame(udpClient, ipEndPoint);
+        }
+
+        private void PlayGame(UdpClient udpClient, IPEndPoint ipEndPoint)
+        {
             var receive = udpClient.Receive(ref ipEndPoint);
             mainWindow.ShowPlayground(receive);
             mainWindow.KeyDown += (_, e) => KeyDown(e, udpClient);
