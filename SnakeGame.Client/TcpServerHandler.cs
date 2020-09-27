@@ -61,7 +61,6 @@ namespace SnakeGame.Client
                             foreach (var newPlayers in playersServer)
                             {
                                 mainWindow.Players.Dispatcher.Invoke(() => playersClient.Add(newPlayers.ToString()));
-                                ;
                             }
                         }
 
